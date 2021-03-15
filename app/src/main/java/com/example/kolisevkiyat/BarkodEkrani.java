@@ -196,7 +196,13 @@ public class BarkodEkrani extends AppCompatActivity {
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next())
                 {
-                    return rs.getString(1);
+                    String cariAdi = rs.getString(1);
+                    System.out.println(cariAdi);
+                    String trCariAdi = cariAdi.replaceAll("Ý","İ");
+                    trCariAdi=trCariAdi.replaceAll("Þ","Ş");
+                    trCariAdi=trCariAdi.replaceAll("Ð","Ğ");
+                    System.out.println(trCariAdi);
+                    return trCariAdi;
                 }
             }
             else

@@ -262,7 +262,11 @@ public class MainActivity extends AppCompatActivity {
 
             for (Cari cari : getCariler())
             {
-                cariAdlari.add(cari.CARI_ADI);
+                String trCariAdi = cari.CARI_ADI.replaceAll("Ý","İ");
+                trCariAdi=trCariAdi.replaceAll("Þ","Ş");
+                trCariAdi=trCariAdi.replaceAll("Ð","Ğ");
+
+                cariAdlari.add(trCariAdi);
             }
 
             ArrayAdapter<String> cariAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,cariAdlari);
