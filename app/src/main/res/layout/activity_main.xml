@@ -66,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,23 +121,23 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:onClick="createBelgeNo"
-        android:text="Belge No"
+        android:text="Belge No AL"
         app:layout_constraintBottom_toTopOf="@+id/btnBasla"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnBasla"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:onClick="barcodeEkranaGit"
-        android:text="Barkod"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Koli OKUTMA EKRANI"
+        app:layout_constraintBottom_toTopOf="@+id/btnCamera"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCamera" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvPlasiyerKod"
@@ -157,15 +157,16 @@
         android:id="@+id/btnCamera"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:onClick="cameraEkranaGit"
         android:text="Camera"
-        app:layout_constraintBottom_toBottomOf="@+id/btnBasla"
-        app:layout_constraintEnd_toStartOf="@+id/btnBasla"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -174,4 +175,19 @@
         android:text="Offline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <ListView
+        android:id="@+id/rvSonIslemler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnBelgeNoGetir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch3" >
+
+    </ListView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
