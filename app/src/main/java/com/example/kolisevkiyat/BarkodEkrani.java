@@ -51,6 +51,7 @@ public class BarkodEkrani extends AppCompatActivity {
         tvCariAdi.setText(getCariAdiByRecNo(dto.CariRecNo));
 
 
+
         swTestReal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -142,9 +143,17 @@ public class BarkodEkrani extends AppCompatActivity {
 
             }
         });
-
+        koliBarkodlari=getKoliBarkodByBelgeNo(dto.BelgeNo);
+        if (koliBarkodlari.size()!=0){
+            ListeGuncelle(koliBarkodlari);
+        }
         System.out.println("BarkodEkrani onCreate");
     }//onCreate
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 
     @Override
     protected void onPause() {
@@ -293,5 +302,28 @@ public class BarkodEkrani extends AppCompatActivity {
         ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, barcodes);
         lvKoli.setAdapter(arrayAdapter);
         tvOkutulanBarodSayisi.setText("Okutulan Koli Sayısı : " + barcodes.size());
+    }
+
+    public ArrayList<String> getKoliBarkodByBelgeNo(String BelgeNo){
+        ArrayList<String> koliler = new ArrayList<>();
+        try {
+            ConnectionHelper connectionHelper = new ConnectionHelper();
+            connect = connectionHelper.ConnectionClass();
+            if (connect != null) {
+                String query = String.format("SELECT BT_STRING_3 FROM TBLSTOKHR WHERE  BELGE_NO='%s'",BelgeNo);
+                Statement st = connect.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                while (rs.next()) {
+                   koliler.add(rs.getString(1));
+                }
+                return koliler;
+            } else {
+                ConnectionResult = "Check Connection";
+                Toast toast = Toast.makeText(getApplicationContext(), ConnectionResult.toString(), Toast.LENGTH_SHORT);
+            }
+        } catch (Exception ex) {
+            Toast toast = Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT);
+        }
+        return koliler;
     }
 }

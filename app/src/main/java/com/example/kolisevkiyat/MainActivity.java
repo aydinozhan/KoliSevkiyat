@@ -2,6 +2,8 @@ package com.example.kolisevkiyat;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView evrakNo, belgeNo, plasiyer, plasiyerKod;
     Spinner cariKodlar;
     androidx.appcompat.widget.SwitchCompat sw;
-    ListView rvSonIslemler;
+    RecyclerView rvSonIslemler;
 
     public ArrayList<String> cariAdlari = new ArrayList<String>();
     public ArrayList<Cari> Cariler = new ArrayList<Cari>();
@@ -60,7 +63,12 @@ public class MainActivity extends AppCompatActivity {
         plasiyer.setText("");
         plasiyerKod.setText("");
 
-        FillListSonIslemler(getSonIslemler());
+        SonIslemAdapter myAdapter = new SonIslemAdapter(getSonIslemler());
+        rvSonIslemler.setAdapter(myAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        rvSonIslemler.setLayoutManager(linearLayoutManager);
+
+        //FillListSonIslemler(getSonIslemler());
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -275,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
             ArrayAdapter<String> cariAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cariAdlari);
             cariAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cariKodlar.setAdapter(cariAdapter);
+
+
         } else
             Toast.makeText(getApplicationContext(), "Offline Çalışma", Toast.LENGTH_SHORT).show();
     }
@@ -320,6 +330,7 @@ public class MainActivity extends AppCompatActivity {
             Dto dto = new Dto("BelgeNo", "EvrakNo", 0);
             intent.putExtra("Dto", dto);
             startActivity(intent);
+
         }
     }
 
@@ -373,12 +384,15 @@ public class MainActivity extends AppCompatActivity {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             connect = connectionHelper.ConnectionClass();
             if (connect != null) {
-                String query = "SELECT TOP 5  F.BELGE_NO,F.EVRAK_NO,C.REC_NO,C.CARI_ADI from TBLCARISB AS C INNER JOIN TBLFATSB AS F ON C.REC_NO=F.CARI_KODU_RECID ORDER BY F.REC_NO DESC";
+                String query = "SELECT TOP 10  F.BELGE_NO,F.EVRAK_NO,C.REC_NO,C.CARI_ADI from TBLCARISB AS C INNER JOIN TBLFATSB AS F ON C.REC_NO=F.CARI_KODU_RECID ORDER BY F.REC_NO DESC";
                 Statement st = connect.createStatement();
                 ResultSet rs = st.executeQuery(query);
 
                 while (rs.next()) {
-                    SonIslem sonIslem = new SonIslem(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getString(4));
+                    String trCariAdi = rs.getString(4).replaceAll("Ý", "İ");
+                    trCariAdi = trCariAdi.replaceAll("Þ", "Ş");
+                    trCariAdi = trCariAdi.replaceAll("Ð", "Ğ");
+                    SonIslem sonIslem = new SonIslem(rs.getString(1), rs.getString(2), rs.getInt(3), trCariAdi);
                     sonIslemler.add(sonIslem);
                 }
                 return sonIslemler;
@@ -403,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, last5);
-        rvSonIslemler.setAdapter(arrayAdapter);
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, last5);
+        //rvSonIslemler.setAdapter(arrayAdapter);
     }
 }
